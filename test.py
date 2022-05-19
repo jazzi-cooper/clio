@@ -523,6 +523,10 @@ async def ledger_data_full(ip, port, ledger, binary, limit, typ=None, count=-1, 
                             keys.append(x["index"])
                     else:
                         if typ is None or x["LedgerEntryType"] == typ:
+                            flags = x["Flags"]
+                            requiresAuth = (int(flags)) & 0b1000000000000000000
+                            if requiresAuth:
+                                print(json.dumps(x))
                             blobs.append(x)
                             keys.append(x["index"])
                 if count != -1 and len(keys) > count:
